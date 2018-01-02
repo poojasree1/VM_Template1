@@ -3,25 +3,32 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "location": {
-            "type": "String"
+            "type": "String",
+			"value": "eastUS"
         },
         "virtualMachineName": {
-            "type": "String"
+            "type": "String",
+			"value": "VM_azureCLI"
         },
         "virtualMachineSize": {
-            "type": "String"
+            "type": "String",
+			"value": "Basic_A3"
         },
         "adminUsername": {
-            "type": "String"
+            "type": "String",
+			"value": "az2325"
         },
         "virtualNetworkName": {
-            "type": "String"
+            "type": "String",
+			"value": "EngSpResourceGroup-vnet"
         },
         "networkInterfaceName": {
-            "type": "String"
+            "type": "String",
+			"value": "engspansiblerhel302"
         },
         "networkSecurityGroupName": {
-            "type": "String"
+            "type": "String",
+			"value": "engspRhelVmAzNSG"
         },
         "adminPassword": {
             "type": "SecureString"
@@ -36,13 +43,15 @@
             "type": "String"
         },
         "storageAccountName": {
-            "type": "String"
+            "type": "String",
+			"value": "engspstorageaccount"
         },
         "storageAccountType": {
             "type": "String"
         },
         "diagnosticsStorageAccountName": {
-            "type": "String"
+            "type": "String",
+			"value": "engspstorageaccount"
         },
         "diagnosticsStorageAccountId": {
             "type": "String"
@@ -54,16 +63,19 @@
             "type": "String"
         },
         "subnetName": {
-            "type": "String"
+            "type": "String",
+			"value": "EngSpResourceGroup-vnet"
         },
         "subnetPrefix": {
             "type": "String"
         },
         "publicIpAddressName": {
-            "type": "String"
+            "type": "String",
+			 "value": "52.191.195.109"
         },
         "publicIpAddressType": {
-            "type": "String"
+            "type": "String",
+			"value": "String"
         }
     },
     "variables": {
