@@ -74,12 +74,6 @@
           "[concat('Microsoft.Network/networkInterfaces/', parameters('VirtualMachinenetworkInterfaceName'))]",
           "[concat('Microsoft.Storage/storageAccounts/', parameters('VirtualMachinediagnosticsStorageAccountName'))]"
         ],
-        "tags": {
-          "ObjectName": "[parameters('VirtualMachinename')]",
-          "FGID": "[parameters('tag_fgid')]",
-          "Location": "[parameters('tag_location')]",
-          "Showback": "[parameters('tag_projectname')]"
-        },
         "properties": {
           "osProfile": {
             "computerName": "[parameters('VirtualMachinename')]",
@@ -124,12 +118,6 @@
         "type": "Microsoft.Storage/storageAccounts",
         "apiVersion": "2015-06-15",
         "location": "[parameters('VirtualMachinelocation')]",
-        "tags": {
-          "ObjectName": "[parameters('VirtualMachinediagnosticsStorageAccountName')]",
-          "FGID": "[parameters('tag_fgid')]",
-          "Location": "[parameters('tag_location')]",
-          "Showback": "[parameters('tag_projectname')]"
-        },
         "properties": {
           "accountType": "[parameters('VirtualMachinediagnosticsStorageAccountType')]"
         }
@@ -139,12 +127,6 @@
         "type": "Microsoft.Network/virtualNetworks",
         "apiVersion": "2016-12-01",
         "location": "[parameters('VirtualMachinelocation')]",
-        "tags": {
-          "ObjectName": "[parameters('VirtualMachinevirtualNetworkName')]",
-          "FGID": "[parameters('tag_fgid')]",
-          "Location": "[parameters('tag_location')]",
-          "Showback": "[parameters('tag_projectname')]"
-        },
         "properties": {
           "addressSpace": {
             "addressPrefixes": [
@@ -171,12 +153,6 @@
           "[concat('Microsoft.Network/publicIpAddresses/', parameters('VirtualMachinepublicIpAddressName'))]",
           "[concat('Microsoft.Network/networkSecurityGroups/', parameters('VirtualMachinenetworkSecurityGroupName'))]"
         ],
-        "tags": {
-          "ObjectName": "[parameters('VirtualMachinenetworkInterfaceName')]",
-          "FGID": "[parameters('tag_fgid')]",
-          "Location": "[parameters('tag_location')]",
-          "Showback": "[parameters('tag_projectname')]"
-        },
         "properties": {
           "ipConfigurations": [
             {
@@ -202,12 +178,7 @@
         "type": "Microsoft.Network/publicIpAddresses",
         "apiVersion": "2016-09-01",
         "location": "[parameters('VirtualMachinelocation')]",
-        "tags": {
-          "ObjectName": "[parameters('VirtualMachinepublicIpAddressName')]",
-          "FGID": "[parameters('tag_fgid')]",
-          "Location": "[parameters('tag_location')]",
-          "Showback": "[parameters('tag_projectname')]"
-        },
+        
         "properties": {
           "publicIpAllocationMethod": "[parameters('VirtualMachinepublicIpAddressType')]"
         }
@@ -217,12 +188,7 @@
         "type": "Microsoft.Network/networkSecurityGroups",
         "apiVersion": "2016-09-01",
         "location": "[parameters('VirtualMachinelocation')]",
-        "tags": {
-          "ObjectName": "[parameters('VirtualMachinenetworkSecurityGroupName')]",
-          "FGID": "[parameters('tag_fgid')]",
-          "Location": "[parameters('tag_location')]",
-          "Showback": "[parameters('tag_projectname')]"
-        },
+        
         "properties": {
           "securityRules": [
             {
