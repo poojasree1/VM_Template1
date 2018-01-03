@@ -1,246 +1,253 @@
 {
     "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
-    "parameters": {
-        "location": {
-            "type": "String"
-        },
-        "virtualMachineName": {
-            "type": "String"
-        },
-        "virtualMachineSize": {
-            "type": "String"
-        },
-        "adminUsername": {
-            "type": "String"
-        },
-        "virtualNetworkName": {
-            "type": "String"
-        },
-        "networkInterfaceName": {
-            "type": "String"
-        },
-        "networkSecurityGroupName": {
-            "type": "String"
-        },
-        "adminPassword": {
-            "type": "SecureString"
-        },
-        "availabilitySetName": {
-            "type": "String"
-        },
-        "availabilitySetPlatformFaultDomainCount": {
-            "type": "String"
-        },
-        "availabilitySetPlatformUpdateDomainCount": {
-            "type": "String"
-        },
-        "storageAccountName": {
-            "type": "String"
-        },
-        "storageAccountType": {
-            "type": "String"
-        },
-        "diagnosticsStorageAccountName": {
-            "type": "String"
-        },
-        "diagnosticsStorageAccountId": {
-            "type": "String"
-        },
-        "diagnosticsStorageAccountType": {
-            "type": "String"
-        },
-        "addressPrefix": {
-            "type": "String"
-        },
-        "subnetName": {
-            "type": "String"
-        },
-        "subnetPrefix": {
-            "type": "String"
-        },
-        "publicIpAddressName": {
-            "type": "String"
-        },
-        "publicIpAddressType": {
-            "type": "String"
-        }
+  "parameters": {
+    "VirtualMachinelocation": {
+      "type": "string"
     },
+    "VirtualMachinename": {
+      "type": "string"
+    },
+    "VirtualMachinesize": {
+      "type": "string"
+    },
+    "VirtualMachineOSPublisher": {
+      "type": "string"
+    },
+    "VirtualMachineOSOffer": {
+      "type": "string"
+    },
+    "VirtualMachineOSSku": {
+      "type": "string"
+    },
+   "VirtualMachineOSVersion": {
+      "type": "string"
+    },
+    "VirtualMachineadminUsername": {
+      "type": "string"
+    },
+    "VirtualMachinevirtualNetworkName": {
+      "type": "string"
+    },
+    "VirtualMachinenetworkInterfaceName": {
+      "type": "string"
+    },
+    "VirtualMachinenetworkSecurityGroupName": {
+      "type": "string"
+    },
+    "VirtualMachineadminPassword": {
+      "type": "securestring"
+    },
+    "VirtualMachinediagnosticsStorageAccountName": {
+      "type": "string"
+    },
+    "VirtualMachinediagnosticsStorageAccountType": {
+      "type": "string"
+    },
+    "VirtualMachineaddressPrefix": {
+      "type": "string"
+    },
+    "VirtualMachinesubnetName": {
+      "type": "string"
+    },
+    "VirtualMachinesubnetPrefix": {
+      "type": "string"
+    },
+    "VirtualMachinepublicIpAddressName": {
+      "type": "string"
+    },
+    "VirtualMachinepublicIpAddressType": {
+      "type": "string"
+    }
+  },
     "variables": {
-        "vnetId": "[resourceId('EngSpResourceGroup','Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]",
-        "subnetRef": "[concat(variables('vnetId'), '/subnets/', parameters('subnetName'))]"
+        "vnetId": "[resourceId(resourceGroup().name,'Microsoft.Network/virtualNetworks', parameters('VirtualMachinevirtualNetworkName'))]",
+        "subnetRef": "[concat(variables('vnetId'), '/subnets/', parameters('VirtualMachinesubnetName'))]"
     },
     "resources": [
-        {
-            "type": "Microsoft.Compute/virtualMachines",
-            "name": "[parameters('virtualMachineName')]",
-            "apiVersion": "2016-04-30-preview",
-            "location": "[parameters('location')]",
-            "properties": {
-                "osProfile": {
-                    "computerName": "[parameters('virtualMachineName')]",
-                    "adminUsername": "[parameters('adminUsername')]",
-                    "adminPassword": "[parameters('adminPassword')]"
-                },
-                "hardwareProfile": {
-                    "vmSize": "[parameters('virtualMachineSize')]"
-                },
-                "storageProfile": {
-                    "imageReference": {
-                        "publisher": "Canonical",
-                        "offer": "UbuntuServer",
-                        "sku": "17.04",
-                        "version": "latest"
-                    },
-                    "osDisk": {
-                        "createOption": "fromImage",
-                        "vhd": {
-                            "uri": "[concat(concat(reference(resourceId('EngSpResourceGroup', 'Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2015-06-15').primaryEndpoints['blob'], 'vhds/'), parameters('virtualMachineName'), '20170525105519.vhd')]"
-                        },
-                        "name": "[parameters('virtualMachineName')]"
-                    },
-                    "dataDisks": []
-                },
-                "networkProfile": {
-                    "networkInterfaces": [
-                        {
-                            "id": "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaceName'))]"
-                        }
-                    ]
-                },
-                "diagnosticsProfile": {
-                    "bootDiagnostics": {
-                        "enabled": true,
-                        "storageUri": "[reference(resourceId('EngSpResourceGroup', 'Microsoft.Storage/storageAccounts', parameters('diagnosticsStorageAccountName')), '2015-06-15').primaryEndpoints['blob']]"
-                    }
-                },
-                "availabilitySet": {
-                    "id": "[resourceId('Microsoft.Compute/availabilitySets', parameters('availabilitySetName'))]"
-                }
+      {
+        "name": "[parameters('VirtualMachinename')]",
+        "type": "Microsoft.Compute/virtualMachines",
+        "apiVersion": "2016-04-30-preview",
+        "location": "[parameters('VirtualMachinelocation')]",
+        "dependsOn": [
+          "[concat('Microsoft.Network/networkInterfaces/', parameters('VirtualMachinenetworkInterfaceName'))]",
+          "[concat('Microsoft.Storage/storageAccounts/', parameters('VirtualMachinediagnosticsStorageAccountName'))]"
+        ],
+        "tags": {
+          "ObjectName": "[parameters('VirtualMachinename')]",
+          "FGID": "[parameters('tag_fgid')]",
+          "Location": "[parameters('tag_location')]",
+          "Showback": "[parameters('tag_projectname')]"
+        },
+        "properties": {
+          "osProfile": {
+            "computerName": "[parameters('VirtualMachinename')]",
+            "adminUsername": "[parameters('VirtualMachineadminUsername')]",
+            "adminPassword": "[parameters('VirtualMachineadminPassword')]"
+          },
+          "hardwareProfile": {
+            "vmSize": "[parameters('VirtualMachinesize')]"
+          },
+          "storageProfile": {
+            "imageReference": {
+              "publisher": "[parameters('VirtualMachineOSPublisher')]",
+              "offer": "[parameters('VirtualMachineOSOffer')]",
+              "sku": "[parameters('VirtualMachineOSSku')]",
+              "version": "[parameters('VirtualMachineOSVersion')]"
             },
-            "dependsOn": [
-                "[concat('Microsoft.Network/networkInterfaces/', parameters('networkInterfaceName'))]",
-                "[concat('Microsoft.Compute/availabilitySets/', parameters('availabilitySetName'))]",
-                "[concat('Microsoft.Storage/storageAccounts/', parameters('storageAccountName'))]",
-                "[concat('Microsoft.Storage/storageAccounts/', parameters('diagnosticsStorageAccountName'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Compute/availabilitySets",
-            "name": "[parameters('availabilitySetName')]",
-            "apiVersion": "2016-04-30-preview",
-            "location": "[parameters('location')]",
-            "properties": {
-                "platformFaultDomainCount": "[parameters('availabilitySetPlatformFaultDomainCount')]",
-                "platformUpdateDomainCount": "[parameters('availabilitySetPlatformUpdateDomainCount')]"
-            }
-        },
-        {
-            "type": "Microsoft.Storage/storageAccounts",
-            "name": "[parameters('storageAccountName')]",
-            "apiVersion": "2015-06-15",
-            "location": "[parameters('location')]",
-            "properties": {
-                "accountType": "[parameters('storageAccountType')]"
-            }
-        },
-        {
-            "type": "Microsoft.Storage/storageAccounts",
-            "name": "[parameters('diagnosticsStorageAccountName')]",
-            "apiVersion": "2015-06-15",
-            "location": "[parameters('location')]",
-            "properties": {
-                "accountType": "[parameters('diagnosticsStorageAccountType')]"
-            }
-        },
-        {
-            "type": "Microsoft.Network/virtualNetworks",
-            "name": "[parameters('virtualNetworkName')]",
-            "apiVersion": "2016-12-01",
-            "location": "[parameters('location')]",
-            "properties": {
-                "addressSpace": {
-                    "addressPrefixes": [
-                        "[parameters('addressPrefix')]"
-                    ]
-                },
-                "subnets": [
-                    {
-                        "name": "[parameters('subnetName')]",
-                        "properties": {
-                            "addressPrefix": "[parameters('subnetPrefix')]"
-                        }
-                    }
-                ]
-            }
-        },
-        {
-            "type": "Microsoft.Network/networkInterfaces",
-            "name": "[parameters('networkInterfaceName')]",
-            "apiVersion": "2016-09-01",
-            "location": "[parameters('location')]",
-            "properties": {
-                "ipConfigurations": [
-                    {
-                        "name": "ipconfig1",
-                        "properties": {
-                            "subnet": {
-                                "id": "[variables('subnetRef')]"
-                            },
-                            "privateIPAllocationMethod": "Dynamic",
-                            "publicIpAddress": {
-                                "id": "[resourceId('EngSpResourceGroup','Microsoft.Network/publicIpAddresses', parameters('publicIpAddressName'))]"
-                            }
-                        }
-                    }
-                ],
-                "networkSecurityGroup": {
-                    "id": "[resourceId('EngSpResourceGroup', 'Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroupName'))]"
-                }
+            "osDisk": {
+              "createOption": "fromImage",
+              "managedDisk": {
+                "storageAccountType": "Premium_LRS"
+              }
             },
-            "dependsOn": [
-                "[concat('Microsoft.Network/virtualNetworks/', parameters('virtualNetworkName'))]",
-                "[concat('Microsoft.Network/publicIpAddresses/', parameters('publicIpAddressName'))]",
-                "[concat('Microsoft.Network/networkSecurityGroups/', parameters('networkSecurityGroupName'))]"
+            "dataDisks": []
+          },
+          "networkProfile": {
+            "networkInterfaces": [
+              {
+                "id": "[resourceId('Microsoft.Network/networkInterfaces', parameters('VirtualMachinenetworkInterfaceName'))]"
+              }
             ]
-        },
-        {
-            "type": "Microsoft.Network/publicIpAddresses",
-            "name": "[parameters('publicIpAddressName')]",
-            "apiVersion": "2016-09-01",
-            "location": "[parameters('location')]",
-            "properties": {
-                "publicIpAllocationMethod": "[parameters('publicIpAddressType')]"
+          },
+          "diagnosticsProfile": {
+            "bootDiagnostics": {
+              "enabled": true,
+              "storageUri": "[reference(resourceId(resourceGroup().name, 'Microsoft.Storage/storageAccounts', parameters('VirtualMachinediagnosticsStorageAccountName')), '2015-06-15').primaryEndpoints['blob']]"
             }
-        },
-        {
-            "type": "Microsoft.Network/networkSecurityGroups",
-            "name": "[parameters('networkSecurityGroupName')]",
-            "apiVersion": "2016-09-01",
-            "location": "[parameters('location')]",
-            "properties": {
-                "securityRules": [
-                    {
-                        "name": "default-allow-ssh",
-                        "properties": {
-                            "priority": 1000,
-                            "sourceAddressPrefix": "*",
-                            "protocol": "TCP",
-                            "destinationPortRange": "22",
-                            "access": "Allow",
-                            "direction": "Inbound",
-                            "sourcePortRange": "*",
-                            "destinationAddressPrefix": "*"
-                        }
-                    }
-                ]
-            }
+          }
         }
+      },
+      {
+        "name": "[parameters('VirtualMachinediagnosticsStorageAccountName')]",
+        "type": "Microsoft.Storage/storageAccounts",
+        "apiVersion": "2015-06-15",
+        "location": "[parameters('VirtualMachinelocation')]",
+        "tags": {
+          "ObjectName": "[parameters('VirtualMachinediagnosticsStorageAccountName')]",
+          "FGID": "[parameters('tag_fgid')]",
+          "Location": "[parameters('tag_location')]",
+          "Showback": "[parameters('tag_projectname')]"
+        },
+        "properties": {
+          "accountType": "[parameters('VirtualMachinediagnosticsStorageAccountType')]"
+        }
+      },
+      {
+        "name": "[parameters('VirtualMachinevirtualNetworkName')]",
+        "type": "Microsoft.Network/virtualNetworks",
+        "apiVersion": "2016-12-01",
+        "location": "[parameters('VirtualMachinelocation')]",
+        "tags": {
+          "ObjectName": "[parameters('VirtualMachinevirtualNetworkName')]",
+          "FGID": "[parameters('tag_fgid')]",
+          "Location": "[parameters('tag_location')]",
+          "Showback": "[parameters('tag_projectname')]"
+        },
+        "properties": {
+          "addressSpace": {
+            "addressPrefixes": [
+              "[parameters('VirtualMachineaddressPrefix')]"
+            ]
+          },
+          "subnets": [
+            {
+              "name": "[parameters('VirtualMachinesubnetName')]",
+              "properties": {
+                "addressPrefix": "[parameters('VirtualMachinesubnetPrefix')]"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "[parameters('VirtualMachinenetworkInterfaceName')]",
+        "type": "Microsoft.Network/networkInterfaces",
+        "apiVersion": "2016-09-01",
+        "location": "[parameters('VirtualMachinelocation')]",
+        "dependsOn": [
+          "[concat('Microsoft.Network/virtualNetworks/', parameters('VirtualMachinevirtualNetworkName'))]",
+          "[concat('Microsoft.Network/publicIpAddresses/', parameters('VirtualMachinepublicIpAddressName'))]",
+          "[concat('Microsoft.Network/networkSecurityGroups/', parameters('VirtualMachinenetworkSecurityGroupName'))]"
+        ],
+        "tags": {
+          "ObjectName": "[parameters('VirtualMachinenetworkInterfaceName')]",
+          "FGID": "[parameters('tag_fgid')]",
+          "Location": "[parameters('tag_location')]",
+          "Showback": "[parameters('tag_projectname')]"
+        },
+        "properties": {
+          "ipConfigurations": [
+            {
+              "name": "ipconfig1",
+              "properties": {
+                "subnet": {
+                  "id": "[variables('subnetRef')]"
+                },
+                "privateIPAllocationMethod": "Dynamic",
+                "publicIpAddress": {
+                  "id": "[resourceId(resourceGroup().name,'Microsoft.Network/publicIpAddresses', parameters('VirtualMachinepublicIpAddressName'))]"
+                }
+              }
+            }
+          ],
+          "networkSecurityGroup": {
+            "id": "[resourceId(resourceGroup().name, 'Microsoft.Network/networkSecurityGroups', parameters('VirtualMachinenetworkSecurityGroupName'))]"
+          }
+        }
+      },
+      {
+        "name": "[parameters('VirtualMachinepublicIpAddressName')]",
+        "type": "Microsoft.Network/publicIpAddresses",
+        "apiVersion": "2016-09-01",
+        "location": "[parameters('VirtualMachinelocation')]",
+        "tags": {
+          "ObjectName": "[parameters('VirtualMachinepublicIpAddressName')]",
+          "FGID": "[parameters('tag_fgid')]",
+          "Location": "[parameters('tag_location')]",
+          "Showback": "[parameters('tag_projectname')]"
+        },
+        "properties": {
+          "publicIpAllocationMethod": "[parameters('VirtualMachinepublicIpAddressType')]"
+        }
+      },
+      {
+        "name": "[parameters('VirtualMachinenetworkSecurityGroupName')]",
+        "type": "Microsoft.Network/networkSecurityGroups",
+        "apiVersion": "2016-09-01",
+        "location": "[parameters('VirtualMachinelocation')]",
+        "tags": {
+          "ObjectName": "[parameters('VirtualMachinenetworkSecurityGroupName')]",
+          "FGID": "[parameters('tag_fgid')]",
+          "Location": "[parameters('tag_location')]",
+          "Showback": "[parameters('tag_projectname')]"
+        },
+        "properties": {
+          "securityRules": [
+            {
+              "name": "default-allow-ssh",
+              "properties": {
+                "priority": 1000,
+                "sourceAddressPrefix": "*",
+                "protocol": "TCP",
+                "destinationPortRange": "22",
+                "access": "Allow",
+                "direction": "Inbound",
+                "sourcePortRange": "*",
+                "destinationAddressPrefix": "*"
+              }
+            }
+          ]
+        }
+      }
     ],
     "outputs": {
-        "adminUsername": {
-            "type": "String",
-            "value": "[parameters('adminUsername')]"
+        "VirtualMachineadminUsername": {
+            "type": "string",
+            "value": "[parameters('VirtualMachineadminUsername')]"
         }
     }
 }
+
+
